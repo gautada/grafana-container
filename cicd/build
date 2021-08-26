@@ -6,5 +6,5 @@ docker build --build-arg BRANCH=${VERSION} --no-cache --tag grafana:build .
 # ---------------------- TEST
 
 # ---------------------- DEPLOY
-docker tag grafana:build gautada/grafana:${VERSION}
-docker push gautada/grafana:${VERSION}
+# docker tag grafana:build gautada/grafana:${VERSION}
+# docker push gautada/grafana:${VERSION}
