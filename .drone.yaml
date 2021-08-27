@@ -1,25 +1,12 @@
----
 kind: pipeline
-name: default
+type: kubernetes
+name: Docker Test
 
 steps:
-- name: test
+- name: build
   image: docker:dind
-  volumes:
-  - name: dockersock
-    path: /var/run
   commands:
   - sleep 5 # give docker enough time to start
   - docker ps -a
+  - ls -l
 
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-
-volumes:
-- name: dockersock
-  temp: {}
