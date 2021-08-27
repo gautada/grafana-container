@@ -5,8 +5,9 @@ name: Docker Test
 steps:
 - name: build
   image: docker:dind
+  privileged: true
   commands:
   - sleep 5 # give docker enough time to start
-  # docker ps -a
+  - docker ps -a
   - ls -l
 
