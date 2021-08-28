@@ -8,6 +8,6 @@ steps:
   privileged: true
   commands:
   - sleep 5 # give docker enough time to start
-  - buildah bud -f Dockerfile
+  - buildah bud --build-arg BRANCH=v8.1.2 -f Dockerfile
 
 
