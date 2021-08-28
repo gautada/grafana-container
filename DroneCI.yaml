@@ -5,6 +5,7 @@ name: Docker Test
 steps:
 - name: build
   image: gautada/builder:v1.21.4_v3.2.3
+  privileged: true
   commands:
   - sleep 5 # give docker enough time to start
   - buildah images
