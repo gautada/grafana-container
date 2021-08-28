@@ -4,10 +4,9 @@ name: Docker Test
 
 steps:
 - name: build
-  image: docker:dind
-  privileged: true
+  image: gautada/builder:v1.21.4_v3.2.3
   commands:
   - sleep 5 # give docker enough time to start
-  - docker ps -a
+  - buildah images
   - ls -l
 
