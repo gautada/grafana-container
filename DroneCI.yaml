@@ -8,6 +8,6 @@ steps:
   privileged: true
   commands:
   - sleep 5 # give docker enough time to start
-  - buildah images
-  - ls -l
+  - buildah bud -f Dockerfile
+
 
