@@ -1,4 +1,7 @@
-FROM alpine:3.14.1 as config-alpine
+ARG ALPINE_TAG=0.0.0
+ARG BRANCH=v0.0.0
+
+FROM alpine:$ALPINE_TAG as config-alpine
 
 RUN apk add --no-cache tzdata
 
@@ -6,8 +9,7 @@ RUN cp -v /usr/share/zoneinfo/America/New_York /etc/localtime
 RUN echo "America/New_York" > /etc/timezone
 
 # ------------------------------------------------------------- BUILD GRAFANA
-FROM config-alpine as config-grafana
-ARG BRANCH=v0.0.0
+FROM alpine:$ALPINE_TAG as config-grafana
 
 RUN apk add --no-cache build-base git go yarn
 
@@ -26,19 +28,16 @@ RUN go mod verify
 RUN go run build.go build
 
 # ----------------------------------------------------------- [STAGE] FINAL
-FROM alpine:3.14.1
+FROM alpine:$ALPINE_TAG
 
 COPY --from=config-alpine /etc/localtime /etc/localtime
 COPY --from=config-alpine /etc/timezone  /etc/timezone
 
+EXPOSE 3000
+
 COPY config.ini /etc/grafana/config.ini
 
 RUN apk add --no-cache ca-certificates openssl musl-utils
-
-ARG USER=grafana
-RUN addgroup $USER \
- && adduser -D -s /bin/sh -G $USER $USER \
- && echo "$USER:$USER" | chpasswd
 
 RUN mkdir -p /usr/share/grafana/provisioning/datasources \
              /usr/share/grafana/provisioning/plugins \
@@ -46,6 +45,11 @@ RUN mkdir -p /usr/share/grafana/provisioning/datasources \
              /usr/share/grafana/provisioning/dashboards \
              /var/log/grafana \
              /var/lib/grafana/plugins
+
+ARG USER=grafana
+RUN addgroup $USER \
+ && adduser -D -s /bin/sh -G $USER $USER \
+ && echo "$USER:$USER" | chpasswd
              
 RUN chown $USER:$USER -R /usr/share/grafana /var/log/grafana /var/lib/grafana
 
@@ -58,10 +62,6 @@ COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/bin/*/grafana-serv
 COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/public ./public
 COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/tools ./tools
 
-
-
-WORKDIR /
-EXPOSE 3000
 ENTRYPOINT ["/usr/bin/grafana-server"]
 CMD ["--config=/etc/grafana/config.ini", "--homepath=/usr/share/grafana", "--packaging=container", "'$@'", "cfg:default.log.mode=console", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.logs=/var/log/grafana", "cfg:default.paths.plugins=/var/lib/grafana/plugins", "cfg:default.paths.provisioning=/usr/share/grafana/provisioning"]
 
