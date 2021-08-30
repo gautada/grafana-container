@@ -1,5 +1,5 @@
 ARG ALPINE_TAG=0.0.0
-ARG BRANCH=v0.0.0
+
 
 FROM alpine:$ALPINE_TAG as config-alpine
 
@@ -11,8 +11,9 @@ RUN echo "America/New_York" > /etc/timezone
 # ------------------------------------------------------------- BUILD GRAFANA
 FROM alpine:$ALPINE_TAG as config-grafana
 
-RUN apk add --no-cache build-base git go yarn
+ARG BRANCH=v0.0.0
 
+RUN apk add --no-cache build-base git go yarn
 RUN git config --global advice.detachedHead false
 
 RUN mkdir /usr/lib/go/src/github.com
