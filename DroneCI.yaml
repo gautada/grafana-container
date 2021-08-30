@@ -16,4 +16,4 @@ steps:
   commands:
   - buildah login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD docker.io
   - buildah bud --build-arg ALPINE_TAG=$ALPINE_TAG --build-arg BRANCH=$OCI_VERSION --tag grafana:dev -f Containerfile
-  - buildah push localhost/graphana:dev docker://docker.io/gautada/grafana:$OCI_VERSION
+  - buildah push localhost/grafana:dev docker://docker.io/gautada/grafana:$OCI_VERSION
