@@ -40,29 +40,37 @@ COPY config.ini /etc/grafana/config.ini
 
 RUN apk add --no-cache ca-certificates openssl musl-utils
 
-RUN mkdir -p /usr/share/grafana/provisioning/datasources \
-             /usr/share/grafana/provisioning/plugins \
-             /usr/share/grafana/provisioning/notifiers \
-             /usr/share/grafana/provisioning/dashboards \
-             /var/log/grafana \
-             /var/lib/grafana/plugins
+RUN mkdir -p /var/log/grafana \
+             /opt/grafana-data
+
+COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/bin/*/grafana-server /usr/lib/go/src/github.com/grafana/bin/*/grafana-cli /usr/bin
 
 ARG USER=grafana
 RUN addgroup $USER \
  && adduser -D -s /bin/sh -G $USER $USER \
  && echo "$USER:$USER" | chpasswd
              
-RUN chown $USER:$USER -R /usr/share/grafana /var/log/grafana /var/lib/grafana
+RUN chown $USER:$USER -R /var/log/grafana
 
 USER $USER
 
-WORKDIR /usr/share/grafana
+WORKDIR /home/grafana
+
+RUN ln -s /opt/grafana-data /home/grafana/lib
+
+RUN mkdir -p /home/grafana/lib/provisioning/datasources \
+             /home/grafana/lib/provisioning/plugins \
+             /home/grafana/lib/provisioning/notifiers \
+             /home/grafana/lib/provisioning/dashboards \
+             /home/grafana/lib/plugins
+             
+
 
 COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/conf ./conf
-COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/bin/*/grafana-server /usr/lib/go/src/github.com/grafana/bin/*/grafana-cli /usr/bin
 COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/public ./public
 COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/tools ./tools
 
+
 ENTRYPOINT ["/usr/bin/grafana-server"]
-CMD ["--config=/etc/grafana/config.ini", "--homepath=/usr/share/grafana", "--packaging=container", "'$@'", "cfg:default.log.mode=console", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.logs=/var/log/grafana", "cfg:default.paths.plugins=/var/lib/grafana/plugins", "cfg:default.paths.provisioning=/usr/share/grafana/provisioning"]
+CMD ["--config=/etc/grafana/config.ini", "--homepath=/home/grafana", "--packaging=container", "'$@'", "cfg:default.log.mode=console", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.logs=/var/log/grafana", "cfg:default.paths.plugins=/home/grafana/lib/plugins", "cfg:default.paths.provisioning=/home/grafana/lib/provisioning"]
 
