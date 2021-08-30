@@ -43,6 +43,8 @@ RUN apk add --no-cache ca-certificates openssl musl-utils
 RUN mkdir -p /var/log/grafana \
              /opt/grafana-data
 
+RUN chmod 777 /opt/grafana-data
+
 COPY --from=config-grafana /usr/lib/go/src/github.com/grafana/bin/*/grafana-server /usr/lib/go/src/github.com/grafana/bin/*/grafana-cli /usr/bin
 
 ARG USER=grafana
