@@ -32,6 +32,12 @@ hide_version = false
 - The plugin directory is `/home/grafana/lib/plugins`
 - logs are sent to `/dev/stdout`
 
+### Manual
+
+```
+docker build --build-arg ALPINE_TAG=3.14.1 --build-arg BRANCH=v8.1.2 --tag graphana:dev -f Containerfile . 
+docker run -i -p 3000:3000 -t --name grafana --rm grafana:dev
+```
 ## Usage
 
 
