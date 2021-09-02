@@ -21,12 +21,10 @@ WORKDIR /usr/lib/go/src/github.com
 RUN git clone --branch $BRANCH --depth 1 https://github.com/grafana/grafana.git
 WORKDIR /usr/lib/go/src/github.com/grafana
 
-# RUN yarn --help
-# RUN yarn help install
-# RUN yarn install --help
 
 # https://yarnpkg.com/en/docs/cli/
-# RUN yarn config
+# Possible fix from https://github.com/yarnpkg/yarn/issues/8242
+RUN yarn config set network-timeout 300000
 
 RUN yarn install --verbose --pure-lockfile --har --no-progress
 ENV NODE_ENV production
