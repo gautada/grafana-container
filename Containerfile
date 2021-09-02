@@ -26,7 +26,7 @@ WORKDIR /usr/lib/go/src/github.com/grafana
 # RUN yarn install --help
 
 # https://yarnpkg.com/en/docs/cli/
-RUN yarn config
+# RUN yarn config
 
 RUN yarn install --verbose --pure-lockfile --har --no-progress
 ENV NODE_ENV production

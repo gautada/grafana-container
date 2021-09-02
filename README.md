@@ -4,6 +4,12 @@
 
 ## Configuration
 
+### Version
+
+
+
+As of [September 2, 2021](https://grafana.com/grafana/download?pg=graf-deployment-options&plcmt=deploy-box-1) - Active version is 8.1.2 as tag [REL_13_4](https://github.com/grafana/grafana/tags)
+
 ### Anonymous Auth
 
 The default for this container is to not have authentication. The `/etc/grafana/config.ini` file provides this default configuration which overrides the `default.ini` file.
