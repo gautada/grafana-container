@@ -1,5 +1,5 @@
+# ------------------------------------------------------------- [STAGE] INIT
 ARG ALPINE_TAG=0.0.0
-
 
 FROM alpine:$ALPINE_TAG as config-alpine
 
@@ -8,7 +8,7 @@ RUN apk add --no-cache tzdata
 RUN cp -v /usr/share/zoneinfo/America/New_York /etc/localtime
 RUN echo "America/New_York" > /etc/timezone
 
-# ------------------------------------------------------------- BUILD GRAFANA
+# ------------------------------------------------------------- [STAGE] BUILD
 FROM alpine:$ALPINE_TAG as config-grafana
 
 ARG BRANCH=v0.0.0

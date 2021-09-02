@@ -1,6 +1,6 @@
 kind: pipeline
 type: kubernetes
-name: container_integration
+name: Continueous Integration
 
 steps:
 - name: integrate
