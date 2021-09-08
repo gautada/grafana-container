@@ -2,13 +2,20 @@
 
 [Graphana](https://grafana.com) - Dashboard anything. Observe everything.  Query, visualize, alert on, and understand your data no matter where it’s stored. With Grafana you can create, explore and share all of your data through beautiful, flexible dashboards
 
+## Container
+
+### Versions
+
+- [September 2, 2021](https://grafana.com/grafana/download?pg=graf-deployment-options&plcmt=deploy-box-1) - Active version is 8.1.2 as tag [REL_13_4](https://github.com/grafana/grafana/tags)
+
+### Manual Build
+
+```
+docker build --build-arg ALPINE_TAG=3.14.1 --build-arg BRANCH=v8.1.2 --tag graphana:dev -f Containerfile . 
+docker run -i -p 3000:3000 -t --name grafana --rm grafana:dev
+```
+
 ## Configuration
-
-### Version
-
-
-
-As of [September 2, 2021](https://grafana.com/grafana/download?pg=graf-deployment-options&plcmt=deploy-box-1) - Active version is 8.1.2 as tag [REL_13_4](https://github.com/grafana/grafana/tags)
 
 ### Anonymous Auth
 
@@ -38,12 +45,7 @@ hide_version = false
 - The plugin directory is `/home/grafana/lib/plugins`
 - logs are sent to `/dev/stdout`
 
-### Manual
 
-```
-docker build --build-arg ALPINE_TAG=3.14.1 --build-arg BRANCH=v8.1.2 --tag graphana:dev -f Containerfile . 
-docker run -i -p 3000:3000 -t --name grafana --rm grafana:dev
-```
 ## Usage
 
 
